@@ -1,0 +1,11 @@
+model Image {
+    id           Int        @id @default(autoincrement())
+    alt          String
+    src          String
+    classifiedId Int        @map("classified_id")
+    classified   Classified @relation(fields: [classifiedId], references: [id], onDelete: Cascade)
+    blurHash     String
+    isMain       Boolean    @default(false) @map("is_main")
+
+    @@map("images")
+}

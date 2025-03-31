@@ -1,0 +1,96 @@
+model Classified {
+    id             Int              @id @default(autoincrement())
+    views          Int              @default(0)
+    slug           String           @unique
+    vrm            String?
+    title          String?
+    description    String?
+    year           Int
+    odoReading     Int              @default(0) @map("odo_reading")
+    doors          Int              @default(2)
+    seats          Int              @default(5)
+    price          Int              @default(0) @map("price")
+    makeId         Int              @map("make_id")
+    make           Make             @relation(fields: [makeId], references: [id])
+    modelId        Int              @map("model_id")
+    model          Model            @relation(fields: [modelId], references: [id])
+    modelVariantId Int?             @map("model_variant_id")
+    modelVariant   ModelVariant?    @relation(fields: [modelVariantId], references: [id])
+    ulezCompliant  ULEZCCompliance  @default(NON_EXEMPT)
+    transmission   Transmission     @default(MANUAL)
+    colour         Colour           @default(BLACK)
+    fuelType       FuelType         @default(PETROL)
+    bodyType       BodyType         @default(SEDAN)
+    odoUnit        OdoUnit          @default(MILES)
+    currency       CurrencyCode     @default(GBP)
+    status         ClassifiedStatus @default(DRAFT)
+    images         Image[]
+    customers      Customer[]
+    createdAt      DateTime         @default(now()) @map("created_at")
+    updatedAt      DateTime         @updatedAt @map("updated_at")
+
+    @@index([makeId, modelId], name: "index_make_model")
+    @@index([status], name: "index_status")
+    @@index([price], name: "index_price")
+    @@map("classifieds")
+}
+
+enum ClassifiedStatus {
+    LIVE
+    DRAFT
+    SOLD
+}
+
+enum CurrencyCode {
+    GBP
+    EUR
+    USD
+}
+
+enum OdoUnit {
+    MILES
+    KILOMETERS
+}
+
+enum Colour {
+    BLACK
+    WHITE
+    SILVER
+    GREY
+    BLUE
+    RED
+    GREEN
+    YELLOW
+    ORANGE
+    PURPLE
+    PINK
+}
+
+enum FuelType {
+    PETROL
+    DIESEL
+    ELECTRIC
+    HYBRID
+}
+
+enum BodyType {
+    SEDAN
+    HATCHBACK
+    SALOON
+    ESTATE
+    COUPE
+    CONVERTIBLE
+    SUV
+    MPV
+    PICKUP
+}
+
+enum ULEZCCompliance {
+    EXEMPT
+    NON_EXEMPT
+}
+
+enum Transmission {
+    MANUAL
+    AUTOMATIC
+}
